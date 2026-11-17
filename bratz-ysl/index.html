@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bratz x Saint Laurent</title>
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+<script type="importmap">
+{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}
+</script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const W = 1280, H = 720;
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H);
+renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x020202);
+scene.fog = new THREE.Fog(0x020202, 14, 34);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.35;
+
+const camera = new THREE.PerspectiveCamera(32, W / H, 0.1, 100);
+
+// ---------- text helper (canvas texture) ----------
+function textPlane(text, { width = 8, size = 160, color = '#d9b46a', spacing = 0.32, weight = '700', glow = 0 } = {}) {
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+  ctx.font = `${weight} ${size}px Helvetica, Arial, sans-serif`;
+  const letters = [...text];
+  const sp = size * spacing;
+  const tw = letters.reduce((a, l) => a + ctx.measureText(l).width, 0) + sp * (letters.length - 1);
+  c.width = Math.ceil(tw + size); c.height = Math.ceil(size * 1.5);
+  ctx.font = `${weight} ${size}px Helvetica, Arial, sans-serif`;
+  ctx.textBaseline = 'middle';
+  if (glow) { ctx.shadowColor = color; ctx.shadowBlur = glow; }
+  ctx.fillStyle = color;
+  let x = size / 2;
+  for (const l of letters) { ctx.fillText(l, x, c.height / 2); x += ctx.measureText(l).width + sp; }
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 8;
+  const h = width * c.height / c.width;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(width, h),
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true, toneMapped: false }));
+  return m;
+}
+
+// ---------- set ----------
+const RUNWAY_LEN = 16, RUNWAY_W = 2.4, RUNWAY_H = 0.35;
+
+// mirror floor around runway
+const floor = new Reflector(new THREE.PlaneGeometry(40, 40), {
+  textureWidth: W, textureHeight: H, color: 0x111111 });
+floor.rotation.x = -Math.PI / 2;
+scene.add(floor);
+const floorTint = new THREE.Mesh(new THREE.PlaneGeometry(40, 40),
+  new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.72 }));
+floorTint.rotation.x = -Math.PI / 2; floorTint.position.y = 0.002;
+scene.add(floorTint);
+
+// runway: glossy black lacquer
+const runwayMat = new THREE.MeshPhysicalMaterial({ color: 0x050505, roughness: 0.08, metalness: 0.0, clearcoat: 1, clearcoatRoughness: 0.03 });
+const runway = new THREE.Mesh(new THREE.BoxGeometry(RUNWAY_W, RUNWAY_H, RUNWAY_LEN), runwayMat);
+runway.position.set(0, RUNWAY_H / 2, -RUNWAY_LEN / 2 + 4);
+runway.receiveShadow = true;
+scene.add(runway);
+
+// runway edge light strips
+const stripMat = new THREE.MeshBasicMaterial({ color: 0xfff1d6, toneMapped: false });
+for (const s of [-1, 1]) {
+  const strip = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.02, RUNWAY_LEN), stripMat);
+  strip.position.set(s * (RUNWAY_W / 2 + 0.01), RUNWAY_H - 0.01, runway.position.z);
+  scene.add(strip);
+}
+
+// back wall + logo
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(30, 12), new THREE.MeshStandardMaterial({ color: 0x030303, roughness: 0.9 }));
+wall.position.set(0, 6, -12);
+scene.add(wall);
+const logo = textPlane('SAINT LAURENT', { width: 9, size: 180, color: '#f3e3bd', spacing: 0.28, glow: 30 });
+logo.position.set(0, 4.6, -11.95);
+scene.add(logo);
+const sub = textPlane('×  BRATZ', { width: 2.6, size: 120, color: '#f3e3bd', spacing: 0.5, weight: '400', glow: 18 });
+sub.position.set(0, 3.55, -11.95);
+scene.add(sub);
+// glowing doorway behind the logo
+const door = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 3.2), new THREE.MeshBasicMaterial({ color: 0xffe9c4, toneMapped: false }));
+door.position.set(0, 1.6 + RUNWAY_H, -11.94);
+scene.add(door);
+
+// side walls with vertical SAINT LAURENT
+for (const s of [-1, 1]) {
+  const side = textPlane('SAINT LAURENT', { width: 7, size: 140, color: '#cfa85a', spacing: 0.3, glow: 14 });
+  side.position.set(s * 5.5, 0.7, -3);
+  side.rotation.y = -s * Math.PI / 2;
+  side.scale.setScalar(0.7);
+  scene.add(side);
+}
+
+// front-row benches with silhouettes (placeholders for audience)
+const crowdMat = new THREE.MeshStandardMaterial({ color: 0x0c0c0c, roughness: 0.6 });
+function person(x, z, rotY, h = 1.15) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.45, 4, 10), crowdMat);
+  body.position.y = 0.55 + 0.25; g.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 12), crowdMat);
+  head.position.y = h + 0.05; g.add(head);
+  g.position.set(x, 0, z); g.rotation.y = rotY;
+  return g;
+}
+for (const s of [-1, 1]) {
+  const bench = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.45, RUNWAY_LEN - 2), crowdMat);
+  bench.position.set(s * 2.3, 0.225, -4);
+  scene.add(bench);
+  for (let i = 0; i < 14; i++) scene.add(person(s * 2.3, 2.5 - i * 1.0, s * Math.PI / 2 * -1 + (s > 0 ? Math.PI : 0)));
+}
+
+// ---------- lights ----------
+scene.add(new THREE.AmbientLight(0xffffff, 0.05));
+function spot(x, y, z, tx, tz, intensity = 60, angle = 0.32, color = 0xfff3e0) {
+  const l = new THREE.SpotLight(color, intensity, 30, angle, 0.55, 1.6);
+  l.position.set(x, y, z);
+  l.target.position.set(tx, RUNWAY_H, tz);
+  l.castShadow = true; l.shadow.mapSize.set(1024, 1024); l.shadow.bias = -0.0005;
+  scene.add(l, l.target);
+  return l;
+}
+const keyFront = spot(0, 7, 6, 0, 1.5, 110, 0.28);
+const rims = [spot(-3, 6, -2, 0, 0.5, 50, 0.3, 0xffe2b8), spot(3, 6, -2, 0, 0.5, 50, 0.3, 0xffe2b8)];
+const runwaySpots = [];
+for (let i = 0; i < 4; i++) runwaySpots.push(spot(0, 6, -1 - i * 3, 0, -1 - i * 3, 28, 0.35));
+
+// ---------- doll ----------
+const loader = new GLTFLoader();
+const gltf = await loader.loadAsync('./assets/kylie.glb');
+const doll = gltf.scene;
+doll.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+const box = new THREE.Box3().setFromObject(doll);
+const size = box.getSize(new THREE.Vector3());
+const TARGET_H = 1.75;
+const sc = TARGET_H / size.y;
+doll.scale.setScalar(sc);
+box.setFromObject(doll);
+const center = box.getCenter(new THREE.Vector3());
+const dollRoot = new THREE.Group();
+doll.position.sub(new THREE.Vector3(center.x, box.min.y, center.z));
+dollRoot.add(doll);
+dollRoot.position.set(0, RUNWAY_H, 1.5);
+scene.add(dollRoot);
+window.__info = { size: size.toArray(), scale: sc };
+
+// ---------- camera presets ----------
+const shots = {
+  hero: () => { camera.position.set(0, 1.35, 7.2); camera.lookAt(0, 1.2, 0.5); },
+  wide: () => { camera.position.set(0, 3.2, 12); camera.lookAt(0, 1.4, -4); },
+  side: () => { camera.position.set(3.6, 1.1, 3.6); camera.lookAt(0, 1.2, 1.2); },
+  close: () => { camera.position.set(0.15, 1.85, 3.4); camera.lookAt(0, 1.75, 1.5); },
+};
+window.setShot = (n) => { shots[n](); renderer.render(scene, camera); };
+window.setShot(new URLSearchParams(location.search).get('shot') || 'hero');
+window.__ready = true;
+</script>
+</body>
+</html>
