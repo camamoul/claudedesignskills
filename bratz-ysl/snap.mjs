@@ -20,12 +20,12 @@ const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--ena
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
 page.on('console', m => console.log('[page]', m.text()));
 page.on('pageerror', e => console.log('[err]', e.message));
-await page.goto(`http://localhost:${port}/index.html`);
+await page.goto(`http://localhost:${port}/index.html?doll=${process.env.DOLL||'kylie'}`);
 await page.waitForFunction('window.__ready === true', null, { timeout: 180000 });
 console.log(await page.evaluate('JSON.stringify(window.__info)'));
 for (const s of (shots.length ? shots : ['hero'])) {
-  await page.evaluate(n => window.setShot(n), s);
-  await page.locator('canvas').screenshot({ path: `${out}/${s}.png` });
+  const [sn, r] = s.split(':'); await page.evaluate(([n, rr]) => window.setShot(n, +rr || 0), [sn, r]);
+  await page.locator('canvas').screenshot({ path: `${out}/${process.env.DOLL||'kylie'}_${s.replace(':','_')}.png` });
   console.log('saved', s);
 }
 await browser.close(); server.close();

@@ -145,7 +145,7 @@ for (let i = 0; i < 4; i++) runwaySpots.push(spot(0, 6, -1 - i * 3, 0, -1 - i * 
 
 // ---------- doll ----------
 const loader = new GLTFLoader();
-const gltf = await loader.loadAsync('./assets/kylie.glb');
+const gltf = await loader.loadAsync('./assets/'+(new URLSearchParams(location.search).get('doll')||'kylie')+'.glb');
 const doll = gltf.scene;
 doll.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
 const box = new THREE.Box3().setFromObject(doll);
@@ -169,7 +169,7 @@ const shots = {
   side: () => { camera.position.set(3.6, 1.1, 3.6); camera.lookAt(0, 1.2, 1.2); },
   close: () => { camera.position.set(0.15, 1.85, 3.4); camera.lookAt(0, 1.75, 1.5); },
 };
-window.setShot = (n) => { shots[n](); renderer.render(scene, camera); };
+window.setShot = (n, rot=0) => { dollRoot.rotation.y = rot; shots[n](); renderer.render(scene, camera); };
 window.setShot(new URLSearchParams(location.search).get('shot') || 'hero');
 window.__ready = true;
 </script>
