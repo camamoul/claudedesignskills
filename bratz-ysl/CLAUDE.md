@@ -41,7 +41,9 @@ Les modèles viennent de Rodin (Hyper3D, en Gen-2.5). Les yeux et la bouche sont
 - **Lady Gaga et Doja Cat** : des looks **gothiques noirs** (chapeau, voilette, cristaux noirs), pour rester en noir et or.
 - **Le salon privé** : velours noir et or, laiton, champagne, lumière tamisée.
 - **Le miroir de la fin** : une chambre neutre, sans personne dans le reflet.
-- **Les polices** : Camil a une capture de la police Bratz (en rose dans la capture, **à utiliser en blanc**). Il n'a pas les fichiers .otf : il faut trouver un équivalent libre ou vectoriser.
+- **Les polices** :
+  - **Saint Laurent** : **Helvetica Neue Bold**, en capitales, avec un interlettrage large. Elle est **préinstallée sur macOS**.
+  - **Bratz** : la référence est la capture de Camil (un lettrage cartoon gras, penché, avec un contour crème et une ombre portée noire). **À utiliser en blanc** : remplissage blanc, contour or fin, ombre portée noire douce. Il n'y a pas de fichier .otf : télécharger **House of Fun** (Leigh Taylor / Flava Fonts, gratuite sur FontSpace, l'équivalent le plus proche), ou vectoriser le mot « BRATZ ».
 - **Le ticket doré** n'est pas commencé : Claude propose un design, qu'Aurore reprendra pour le vrai.
 
-Ce qui manque encore : la capture de la police, le modèle 3D du sac, les références de Hailey Bieber et Vaccarello (facultatif), et la musique.
+Ce qui manque encore : le modèle 3D du sac, les références de Hailey Bieber et Vaccarello (facultatif), et la musique.
