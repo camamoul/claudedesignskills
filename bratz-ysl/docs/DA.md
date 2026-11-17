@@ -87,3 +87,51 @@ Vidéo de défilé en 3D, 30 s, 16:9. Des personnages au rendu série Bratz, dan
   - face à la Kylie : admiratif, façon Bratz.
 - **Le son** : **musique uniquement pendant le défilé**. Après le défilé, plus de musique, seulement des voix et l'ambiance au fond.
 - **Les tenues de l'équipe** : préparées par Camil avec Gemini.
+
+## 9. Les décisions des 24 questions (17/11)
+| # | Sujet | Décision |
+|---|---|---|
+| 1 | Échelle | Les Bratz sont à **taille humaine** : tout le monde vit dans le même monde. |
+| 2 | Style du public | **Tout le monde en Bratz** : l'équipe et les 9 célébrités. |
+| 3 | Lien avec le brief | **Le ticket doré** d'Aurore sert d'invitation au défilé. |
+| 4 | Durée | **45 s**. |
+| 5 | Format | **Cinémascope 2.39:1**, avec des bandes noires. |
+| 6 | Fluidité | **24 images/s**, style cinéma. |
+| 7 | Grain | **Mix** : le défilé en image lisse, le mur de souvenirs en grain argentique. |
+| 8 | Étalonnage | **Noir et or chaud**. |
+| 9 | Ouverture | Gros plan sur le **ticket doré**, une main le prend. Noir, puis les lumières s'allument. |
+| 10 | Rythme | Les coupes sont **calées sur la musique**, comme dans un clip de mode. |
+| 11 | Caméra après le défilé | **À l'épaule**, en style documentaire ou vlog. |
+| 12 | Transition | Un **flash blanc** : la musique coupe net. |
+| 13 | Cigarette (Jade) | Une **cigarette classique**. |
+| 14 | Chien | Non. |
+| 15 | Sacs | Kylie a une **pochette**. Camil, Aurore et Florine portent **le même petit sac YSL**. |
+| 16 | Coulisses | Un **salon privé de luxe** : canapé en velours, champagne, lumière dorée douce. |
+| 17 | Voix | **Vos vraies voix**, enregistrées au téléphone. Une de vous double les Bratz. |
+| 18 | Sous-titres | Non. |
+| 19 | Textes à l'écran | « LOOK 01 — KYLIE » et « LOOK 02 — JADE », plus **vos noms** quand on vous voit. |
+| 20 | Bruitages | Talons et déclencheurs d'appareils, briquet et fumée, foule qui chuchote, **effets cartoon** sur le clin d'œil et le bisou. |
+| 21 | Mur de souvenirs | **Des photos glissées dans le cadre d'un miroir** de chambre. |
+| 22 | Carton final | Le logo **SAINT LAURENT × BRATZ** animé, avec les vraies polices. |
+| 23 | Diffusion | **Projection en classe**, donc un rendu de haute qualité. |
+| 24 | Réalisme du décor | **Entre les deux** : des matériaux réalistes (laque, or, fumée) avec des formes épurées et lisses. |
+
+## 10. Le storyboard v2 (45 s, 2.39:1, 24 images/s)
+**Partie 1 : le défilé (musique, coupes sur le rythme)**
+1. **0:00–0:03** : gros plan sur le ticket doré, une main le prend, puis noir.
+2. **0:03–0:06** : les projecteurs claquent un par un. « SAINT LAURENT » apparaît, et les lustres dorés s'allument.
+3. **0:06–0:09** : la Kylie entre, pochette en main. « LOOK 01 — KYLIE ».
+4. **0:09–0:10** : ses talons en ras du sol, avec leur reflet dans la laque.
+5. **0:10–0:13** : pose en bout de podium. Clin d'œil (« ting »), bisou (« smack »), rafale de flashs.
+6. **0:13–0:17** : demi-tour, et travelling sur le front row. Camil, Aurore et Florine sont choqués (avec leurs noms à l'écran). On passe devant Sia, Wintour, Lagerfeld, Vaccarello, Kim, Hailey, Gaga et Doja.
+7. **0:17–0:19** : la vraie Kylie fait « oh », main devant la bouche. Un flash, puis son regard en coin vers le haut : « je sais ».
+8. **0:19–0:22** : la Jade entre en fumant (clic du briquet). « LOOK 02 — JADE ».
+9. **0:22–0:24** : inserts sur les sequins, la cigarette et le nœud.
+10. **0:24–0:26** : elle souffle sa fumée vers l'objectif. **Flash blanc**, et la musique coupe.
+
+**Partie 2 : l'après (caméra à l'épaule, plus de musique, des voix et l'ambiance)**
+11. **0:26–0:31** : l'équipe réagit entre elle : « OMG », très pétasse.
+12. **0:31–0:36** : dans le salon privé, on va parler aux Bratz, admiratifs. Les Bratz discutent derrière.
+13. **0:36–0:39** : photo avec la Kylie : flash, image figée.
+14. **0:39–0:42** : la photo est glissée dans le cadre d'un miroir de chambre, en grain argentique. Dézoom.
+15. **0:42–0:45** : le logo SAINT LAURENT × BRATZ, puis noir.
