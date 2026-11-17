@@ -34,11 +34,14 @@ Les modèles viennent de Rodin (Hyper3D, en Gen-2.5). Les yeux et la bouche sont
 
 ## Décisions complémentaires (17/11)
 - **La vraie Kylie** au front row porte une **perruque rose** (époque « King Kylie »), pour la distinguer de sa Bratz en noir.
-- **Sia** : carré à frange, moitié noir, moitié blond platine.
+- **Sia** : carré à frange longue sur les yeux, moitié noir, moitié blond platine. **Énorme nœud en satin noir** sur la tête, blazer noir croisé, lèvres rouges.
+- **Kim Kardashian** : très longs cheveux noirs ondulés, raie au milieu, haut col montant brun-noir semi-transparent, maquillage nude.
+- **La vraie Kylie** : longue perruque rose pastel ondulée, robe bustier en latex rose, grosse bague en diamants.
+- **Le sac de l'équipe** : sac hobo Saint Laurent type « Le 5 à 7 » en cuir noir lisse, fermoir YSL doré, anse courte d'épaule. Le même pour les trois.
 - **Lady Gaga et Doja Cat** : des looks **gothiques noirs** (chapeau, voilette, cristaux noirs), pour rester en noir et or.
 - **Le salon privé** : velours noir et or, laiton, champagne, lumière tamisée.
 - **Le miroir de la fin** : une chambre neutre, sans personne dans le reflet.
 - **Les polices** : Camil a une capture de la police Bratz (en rose dans la capture, **à utiliser en blanc**). Il n'a pas les fichiers .otf : il faut trouver un équivalent libre ou vectoriser.
 - **Le ticket doré** n'est pas commencé : Claude propose un design, qu'Aurore reprendra pour le vrai.
 
-Ce qui manque encore : la capture de la police, le sac YSL (à générer à part), les références des célébrités et la musique.
+Ce qui manque encore : la capture de la police, le modèle 3D du sac, les références de Hailey Bieber et Vaccarello (facultatif), et la musique.
