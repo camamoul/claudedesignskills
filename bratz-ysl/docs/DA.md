@@ -50,7 +50,7 @@ Vidéo de défilé en 3D, 30 s, 16:9. Des personnages au rendu série Bratz, dan
 
 ## 6. Le casting (validé le 17/11)
 - **Les Bratz qui défilent** : Kylie, en robe noire fendue, ouvre le défilé. Jade, en sequins noirs, défile en fumant (clin d'œil au « Smoking » Saint Laurent).
-- **Au front row, l'équipe** : Camille, Aurore et Florine, en version Bratz, réalisées à partir de leurs photos (Aurore et Florine sont d'accord).
+- **Au front row, l'équipe** : Camil, Aurore et Florine, en version Bratz, réalisées à partir de leurs photos (Aurore et Florine sont d'accord).
 - **Au front row, 9 célébrités**, reconnaissables à leur silhouette et à leurs signes distinctifs :
   - Anna Wintour : carré, lunettes noires ;
   - Sia : perruque au carré bicolore, frange sur les yeux ;
