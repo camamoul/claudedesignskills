@@ -47,3 +47,33 @@ Vidéo de défilé en 3D, 30 s, 16:9. Des personnages au rendu série Bratz, dan
 
 **La caméra :**
 `shot on 85mm / 200mm telephoto at the end of the runway, shallow depth of field, slow push-in, cinematic, 24fps, film grain`
+
+## 6. Le casting (validé le 17/11)
+- **Les Bratz qui défilent** : Kylie, en robe noire fendue, ouvre le défilé. Jade, en sequins noirs, défile en fumant (clin d'œil au « Smoking » Saint Laurent).
+- **Au front row, l'équipe** : Camille, Aurore et Florine, en version Bratz, réalisées à partir de leurs photos (Aurore et Florine sont d'accord).
+- **Au front row, 9 célébrités**, reconnaissables à leur silhouette et à leurs signes distinctifs :
+  - Anna Wintour : carré, lunettes noires ;
+  - Sia : perruque au carré bicolore, frange sur les yeux ;
+  - Karl Lagerfeld (en hommage) : catogan blanc, lunettes noires, col haut ;
+  - Anthony Vaccarello : barbe, lunettes noires ;
+  - Kim Kardashian ;
+  - Hailey Bieber ;
+  - Kylie Jenner : elle se voit défiler en Bratz ;
+  - Lady Gaga ;
+  - Doja Cat.
+- **La conséquence** : avec 12 personnes au front row, le plan 5 devient un **travelling latéral** le long du premier rang (3 à 4 s). Les célébrités restent assises, sans démarche à animer : seulement des réactions de tête et de visage, et des flashs de téléphone.
+- **Les dialogues** : en français et en anglais. **La musique** : à choisir.
+
+## 7. Le storyboard v1 (environ 30 s)
+1. Les lumières s'allument sur le podium (2 s).
+2. La Kylie entre (2 s).
+3. Ses talons, en ras du sol (1,5 s).
+4. Pose, clin d'œil, bisou, et rafale de flashs (2,5 s).
+5. Demi-tour, puis travelling sur le front row : l'équipe choquée et les célébrités (3–4 s).
+6. La Jade entre en fumant (2 s).
+7. Inserts : sequins, cigarette, nœud (1,5 s).
+8. Elle souffle sa fumée vers l'objectif (1,5 s).
+9. L'interview de l'équipe : « what the fuck » (4 s).
+10. En coulisses, on parle aux Bratz (4 s).
+11. Photo avec la Kylie, flash, image figée (4 s).
+12. Carton final « SAINT LAURENT × BRATZ » (3 s).
