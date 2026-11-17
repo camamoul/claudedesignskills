@@ -24,8 +24,8 @@ await page.goto(`http://localhost:${port}/index.html?doll=${process.env.DOLL||'k
 await page.waitForFunction('window.__ready === true', null, { timeout: 180000 });
 console.log(await page.evaluate('JSON.stringify(window.__info)'));
 for (const s of (shots.length ? shots : ['hero'])) {
-  const [sn, r] = s.split(':'); await page.evaluate(([n, rr]) => window.setShot(n, +rr || 0), [sn, r]);
-  await page.locator('canvas').screenshot({ path: `${out}/${process.env.DOLL||'kylie'}_${s.replace(':','_')}.png` });
+  const [sn, r, tt] = s.split(':'); await page.evaluate(([n, rr, t]) => window.setShot(n, +rr || 0, t === undefined ? null : +t), [sn, r, tt]);
+  await page.locator('canvas').screenshot({ path: `${out}/${process.env.DOLL||'kylie'}_${s.replaceAll(':','_')}.png` });
   console.log('saved', s);
 }
 await browser.close(); server.close();

@@ -160,7 +160,10 @@ doll.position.sub(new THREE.Vector3(center.x, box.min.y, center.z));
 dollRoot.add(doll);
 dollRoot.position.set(0, RUNWAY_H, 1.5);
 scene.add(dollRoot);
-window.__info = { size: size.toArray(), scale: sc };
+window.__info = { size: size.toArray(), scale: sc, anims: gltf.animations.map(a=>a.name) };
+const mixer = new THREE.AnimationMixer(doll);
+if (gltf.animations.length) mixer.clipAction(gltf.animations[0]).play();
+window.setTime = (t) => { mixer.setTime(t); };
 
 // ---------- camera presets ----------
 const shots = {
@@ -169,7 +172,7 @@ const shots = {
   side: () => { camera.position.set(3.6, 1.1, 3.6); camera.lookAt(0, 1.2, 1.2); },
   close: () => { camera.position.set(0.15, 1.85, 3.4); camera.lookAt(0, 1.75, 1.5); },
 };
-window.setShot = (n, rot=0) => { dollRoot.rotation.y = rot; shots[n](); renderer.render(scene, camera); };
+window.setShot = (n, rot=0, t=null) => { dollRoot.rotation.y = rot; if (t!==null) mixer.setTime(t); shots[n](); renderer.render(scene, camera); };
 window.setShot(new URLSearchParams(location.search).get('shot') || 'hero');
 window.__ready = true;
 </script>
