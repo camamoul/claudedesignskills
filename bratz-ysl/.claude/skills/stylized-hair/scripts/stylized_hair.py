@@ -6,10 +6,12 @@ Look target: Alwayz Bratz / Pixel Zoo hair - smooth sculpted volumes, a strong
 glossy highlight band across the strands, fine strand grooves, slightly darker
 roots, clean lighter tips. No particle hair: fast and stable in EEVEE.
 
-Three tools:
-  1. --split OBJ        cut the hair out of a single-mesh character by its texture
-                        colour (Rodin bakes everything into one mesh + one texture)
-  2. --smooth OBJ       turn a lumpy hair shell into a smooth sculpted volume
+Tools:
+  0. --mask OBJ         RECOMMENDED for single-mesh (Rodin) characters: paint a soft hair
+                        mask from the texture colour, smooth only the hair, blend the
+                        hair shader in. No cut, no holes, works with an existing rig.
+  1. --split OBJ        cut the hair out by texture colour (only for clean, flat-painted hair)
+  2. --smooth OBJ       turn a separate lumpy hair shell into a smooth volume
   3. --material NAME    build the glossy hair material and assign it (--assign OBJ)
 
 Run inside Blender:
@@ -21,6 +23,10 @@ Run inside Blender:
         --smooth jade_hair --material jade --keep-texture --assign jade_hair --save
 
 Arguments (after --):
+    --mask OBJ           RECOMMENDED for single-mesh (Rodin) characters: no cut, no holes. Paints a
+                         soft hair mask from the texture colour, smooths only the hair (vertex group
+                         'hair'), blends the hair shader in through the 'hair_mask' attribute
+    --smooth-iters N     smoothing strength for --mask (default 30; 15 keeps more sculpted detail)
     --split OBJ          object to cut; creates OBJ_hair (faces whose texture colour is close to --hair-rgb)
     --hair-rgb r,g,b     hair colour to look for in the texture, linear 0-1 (pick it from a render/texture)
     --tol F              colour distance tolerance (default 0.12; raise if hair is patchy)
@@ -30,8 +36,8 @@ Arguments (after --):
     --rgb r,g,b          base colour (linear) when not keeping the texture (default dark brown)
     --keep-texture       use the object's existing image texture as base colour (Rodin paint)
     --assign OBJ         assign HAIR_NAME to every slot of OBJ
-    --grooves F          strand groove density (default 60; 0 disables)
-    --ring F             highlight ring strength (default 0.6; 0 disables)
+    --grooves F          strand groove bump density (default 0 = off; 40-80 for long straight hair)
+    --ring F             highlight ring strength (default 0.5; 0 disables)
     --ring-pos F         ring height on the head = world normal Z (default 0.6; higher = nearer the crown)
     --save               save the .blend
 """
@@ -148,54 +154,61 @@ def smooth_volume(obj):
     print(f"[stylized-hair] {obj.name}: corrective smooth + subdivision added")
 
 
-def hair_material(name, base_rgb, keep_texture_from=None, grooves=60.0,
-                  ring_center=0.6, ring_width=0.09, ring_strength=0.6):
-    mat = bpy.data.materials.get(f"HAIR_{name}") or bpy.data.materials.new(f"HAIR_{name}")
-    nt = mat.node_tree
-    nt.nodes.clear()
+def build_hair_nodes(nt, base_rgb, image=None, grooves=0.0, ring_center=0.6, ring_width=0.09,
+                     ring_strength=0.5, darken_roots=True, uv_name=None):
+    """Build the hair shader inside node tree nt; return the output shader socket."""
     N, L = nt.nodes, nt.links
-    out = N.new("ShaderNodeOutputMaterial")
     bsdf = N.new("ShaderNodeBsdfPrincipled")
     total = N.new("ShaderNodeAddShader")               # principled + lit highlight ring
     L.new(bsdf.outputs[0], total.inputs[0])
-    L.new(total.outputs[0], out.inputs["Surface"])
-    bsdf.inputs["Roughness"].default_value = 0.28
-    bsdf.inputs["Specular IOR Level"].default_value = 0.6
-    bsdf.inputs["Coat Weight"].default_value = 0.35      # the plastic-free "toy gloss" of the series
-    bsdf.inputs["Coat Roughness"].default_value = 0.12
+    bsdf.inputs["Roughness"].default_value = 0.34
+    bsdf.inputs["Specular IOR Level"].default_value = 0.5
+    bsdf.inputs["Coat Weight"].default_value = 0.2       # toy gloss, not lacquer
+    bsdf.inputs["Coat Roughness"].default_value = 0.15
     bsdf.inputs["Anisotropic"].default_value = 0.75      # Cycles only; EEVEE ignores it -> ring below
     tan = N.new("ShaderNodeTangent")
     tan.direction_type = "RADIAL"
-    tan.axis = "Z"                                       # strands run head-top -> tips
+    tan.axis = "Z"
     L.new(tan.outputs[0], bsdf.inputs["Tangent"])
     tc = N.new("ShaderNodeTexCoord")
-    # base colour: flat colour or the Rodin texture, darker at the roots
-    img = find_image(keep_texture_from) if keep_texture_from else None
-    if img:
+    # base colour: flat colour, or the painted texture pushed darker and richer
+    if image:
         tex = N.new("ShaderNodeTexImage")
-        tex.image = img
-        L.new(tc.outputs["UV"], tex.inputs["Vector"])
-        base = tex.outputs["Color"]
+        tex.image = image
+        if uv_name:
+            uvn = N.new("ShaderNodeUVMap"); uvn.uv_map = uv_name
+            L.new(uvn.outputs[0], tex.inputs["Vector"])
+        else:
+            L.new(tc.outputs["UV"], tex.inputs["Vector"])
+        hsv = N.new("ShaderNodeHueSaturation")
+        hsv.inputs["Saturation"].default_value = 1.1
+        hsv.inputs["Value"].default_value = 0.55
+        L.new(tex.outputs["Color"], hsv.inputs["Color"])
+        base = hsv.outputs["Color"]
     else:
         rgbn = N.new("ShaderNodeRGB")
         rgbn.outputs[0].default_value = (*base_rgb, 1)
         base = rgbn.outputs[0]
-    sep = N.new("ShaderNodeSeparateXYZ")
-    L.new(tc.outputs["Generated"], sep.inputs[0])
-    root = N.new("ShaderNodeMapRange")                   # top of bbox (roots) darker
-    root.inputs["From Min"].default_value = 1.0
-    root.inputs["From Max"].default_value = 0.6
-    root.inputs["To Min"].default_value = 0.65
-    root.inputs["To Max"].default_value = 1.0
-    L.new(sep.outputs["Z"], root.inputs["Value"])
-    mul = N.new("ShaderNodeMix")
-    mul.data_type = "RGBA"
-    mul.blend_type = "MULTIPLY"
-    mul.inputs["Factor"].default_value = 1.0
-    gray = N.new("ShaderNodeCombineColor")
-    L.new(root.outputs[0], gray.inputs[0]); L.new(root.outputs[0], gray.inputs[1]); L.new(root.outputs[0], gray.inputs[2])
-    L.new(base, mul.inputs["A"]); L.new(gray.outputs[0], mul.inputs["B"])
-    L.new(mul.outputs["Result"], bsdf.inputs["Base Color"])
+    if darken_roots:
+        sep = N.new("ShaderNodeSeparateXYZ")
+        L.new(tc.outputs["Generated"], sep.inputs[0])
+        root = N.new("ShaderNodeMapRange")               # top of bbox (roots) darker
+        root.inputs["From Min"].default_value = 1.0
+        root.inputs["From Max"].default_value = 0.6
+        root.inputs["To Min"].default_value = 0.65
+        root.inputs["To Max"].default_value = 1.0
+        L.new(sep.outputs["Z"], root.inputs["Value"])
+        mul = N.new("ShaderNodeMix")
+        mul.data_type = "RGBA"
+        mul.blend_type = "MULTIPLY"
+        mul.inputs["Factor"].default_value = 1.0
+        gray = N.new("ShaderNodeCombineColor")
+        for i in range(3):
+            L.new(root.outputs[0], gray.inputs[i])
+        L.new(base, mul.inputs["A"]); L.new(gray.outputs[0], mul.inputs["B"])
+        L.new(mul.outputs["Result"], bsdf.inputs["Base Color"])
+    else:
+        L.new(base, bsdf.inputs["Base Color"])
     # strand grooves: fine vertical bands, slightly wavy, as a bump (not a texture you can see as stripes)
     if grooves > 0:
         wave = N.new("ShaderNodeTexWave")
@@ -255,7 +268,152 @@ def hair_material(name, base_rgb, keep_texture_from=None, grooves=60.0,
     ring.inputs["Color"].default_value = (1.0, 0.93, 0.85, 1)
     L.new(m3.outputs[0], ring.inputs["Strength"])
     L.new(ring.outputs[0], total.inputs[1])
+    return total.outputs[0]
+
+
+def hair_material(name, base_rgb, keep_texture_from=None, grooves=0.0,
+                  ring_center=0.6, ring_width=0.09, ring_strength=0.5):
+    mat = bpy.data.materials.get(f"HAIR_{name}") or bpy.data.materials.new(f"HAIR_{name}")
+    nt = mat.node_tree
+    nt.nodes.clear()
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    img = find_image(keep_texture_from) if keep_texture_from else None
+    sock = build_hair_nodes(nt, base_rgb, img, grooves, ring_center, ring_width, ring_strength)
+    nt.links.new(sock, out.inputs["Surface"])
     return mat
+
+
+def edge_arrays(me):
+    ev = np.empty(len(me.edges) * 2, dtype=np.int64)
+    me.edges.foreach_get("vertices", ev)
+    ev = ev.reshape(-1, 2)
+    return ev[:, 0], ev[:, 1]
+
+
+def weld_groups(co):
+    """Index of coincident-vertex group per vertex (glTF splits vertices along UV seams)."""
+    keys = np.round(co / 1e-5).astype(np.int64)
+    _, inv = np.unique(keys, axis=0, return_inverse=True)
+    return inv.ravel()
+
+
+def weld_max(mask, grp):
+    g = np.full(grp.max() + 1, -np.inf, dtype=mask.dtype)
+    np.maximum.at(g, grp, mask)
+    return g[grp]
+
+
+def morph(mask, a, b, grow):
+    out = mask.copy()
+    op = np.maximum if grow else np.minimum
+    op.at(out, a, mask[b])
+    op.at(out, b, mask[a])
+    return out
+
+
+def blur(mask, a, b):
+    acc = np.zeros_like(mask)
+    cnt = np.zeros_like(mask)
+    np.add.at(acc, a, mask[b]); np.add.at(acc, b, mask[a])
+    np.add.at(cnt, a, 1.0); np.add.at(cnt, b, 1.0)
+    nbmean = np.where(cnt > 0, acc / np.maximum(cnt, 1), mask)
+    return (mask + nbmean) * 0.5
+
+
+def mask_hair(obj, hair_rgb, tol, min_z, base_rgb, keep_texture, ring_center, ring_strength,
+              grooves, smooth_iters=30, close=2):
+    """No cut: paint a soft 'hair' mask on the single mesh, smooth only there, blend a hair shader in."""
+    img = find_image(obj)
+    if img is None:
+        sys.exit(f"{obj.name}: no image texture found to sample")
+    w, h = img.size
+    px = np.empty(w * h * 4, dtype=np.float32)
+    img.pixels.foreach_get(px)
+    px = px.reshape(h, w, 4)[:, :, :3]
+    me = obj.data
+    # weld the UV-seam duplicates glTF creates, otherwise smoothing opens cracks along seams
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    before = len(bm.verts)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)
+    bm.to_mesh(me)
+    bm.free()
+    me.update()
+    print(f"[stylized-hair] {obj.name}: welded {before - len(me.vertices)} seam vertices")
+    nloops = len(me.loops)
+    uvs = np.empty(nloops * 2, dtype=np.float32)
+    me.uv_layers.active.data.foreach_get("uv", uvs)
+    uvs = uvs.reshape(-1, 2)
+    lv = np.empty(nloops, dtype=np.int32)
+    me.loops.foreach_get("vertex_index", lv)
+    cols = px[np.clip((uvs[:, 1] * h).astype(int), 0, h - 1), np.clip((uvs[:, 0] * w).astype(int), 0, w - 1)]
+    dist = np.linalg.norm(cols - np.array(hair_rgb, dtype=np.float32), axis=1)
+    loop_hit = (dist < tol).astype(np.float32)
+    nv = len(me.vertices)
+    hit = np.zeros(nv, dtype=np.float32)
+    np.maximum.at(hit, lv, loop_hit)
+    co = np.empty(nv * 3, dtype=np.float32)
+    me.vertices.foreach_get("co", co)
+    z = co.reshape(-1, 3)[:, 2]
+    zn = (z - z.min()) / max(z.max() - z.min(), 1e-6)
+    hit[zn < min_z] = 0
+    a, b = edge_arrays(me)
+    grp = weld_groups(co.reshape(-1, 3))
+    hit = weld_max(hit, grp)          # a seam vertex is hair if any of its twins is
+    m = hit
+    for _ in range(close):            # closing: fill speckle holes in curls / highlights
+        m = weld_max(morph(m, a, b, True), grp)
+    for _ in range(close):
+        m = -weld_max(-morph(m, a, b, False), grp)
+    for _ in range(close):            # opening: drop isolated dark specks (eyes, lashes) far from the hair
+        m = -weld_max(-morph(m, a, b, False), grp)
+    for _ in range(close):
+        m = weld_max(morph(m, a, b, True), grp)
+    soft = m.copy()
+    for _ in range(3):                # soft edge for the shader blend
+        soft = weld_max(blur(soft, a, b), grp)
+    vg = obj.vertex_groups.get("hair") or obj.vertex_groups.new(name="hair")
+    for wv in np.unique(np.round(soft[soft > 0.01], 2)):   # batch vertices by weight
+        ids = np.nonzero(np.round(soft, 2) == wv)[0].tolist()
+        vg.add(ids, float(wv), "REPLACE")
+    attr = me.color_attributes.get("hair_mask") or me.color_attributes.new("hair_mask", "FLOAT_COLOR", "POINT")
+    rgba = np.repeat(soft[:, None], 4, axis=1)
+    rgba[:, 3] = 1
+    attr.data.foreach_set("color", rgba.ravel())
+    for mod in list(obj.modifiers):
+        if mod.name.startswith("HAIR_"):
+            obj.modifiers.remove(mod)
+    cs = obj.modifiers.new("HAIR_smooth", "CORRECTIVE_SMOOTH")
+    cs.vertex_group = "hair"
+    cs.factor = 1.0
+    cs.iterations = smooth_iters
+    cs.smooth_type = "LENGTH_WEIGHTED"
+    cs.use_only_smooth = True
+    me.shade_smooth()
+    # blend the hair shader into every material of the object, driven by the mask
+    for slot in obj.material_slots:
+        mat = slot.material
+        if not mat or not mat.node_tree or mat.get("hair_blended"):
+            continue
+        nt = mat.node_tree
+        outn = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
+        if not outn.inputs["Surface"].is_linked:
+            continue
+        orig = outn.inputs["Surface"].links[0].from_socket
+        hair_sock = build_hair_nodes(nt, base_rgb, img if keep_texture else None, grooves,
+                                     ring_center=ring_center, ring_strength=ring_strength,
+                                     darken_roots=False, uv_name=me.uv_layers.active.name)
+        at = nt.nodes.new("ShaderNodeAttribute")
+        at.attribute_name = "hair_mask"
+        mix = nt.nodes.new("ShaderNodeMixShader")
+        nt.links.new(at.outputs["Fac"], mix.inputs["Fac"])
+        nt.links.new(orig, mix.inputs[1])
+        nt.links.new(hair_sock, mix.inputs[2])
+        nt.links.new(mix.outputs[0], outn.inputs["Surface"])
+        mat["hair_blended"] = True
+    print(f"[stylized-hair] {obj.name}: hair mask on {int((m > 0.5).sum())} of {nv} vertices, "
+          f"smoothed {smooth_iters} it., hair shader blended in")
 
 
 def assign(mat, obj):
@@ -272,12 +430,16 @@ def main():
         base_rgb = rgb(opt("--rgb", "0.05,0.025,0.012"))
         tol = float(opt("--tol", 0.12))
         min_z = float(opt("--min-z", 0.55))
-        grooves = float(opt("--grooves", 60))
-        ring = float(opt("--ring", 0.6))
+        grooves = float(opt("--grooves", 0))
+        ring = float(opt("--ring", 0.5))
         ring_pos = float(opt("--ring-pos", 0.6))
     except ValueError as err:
         print(f"bad argument: {err}")
         sys.exit(1)
+    if opt("--mask"):
+        mask_hair(get_obj(opt("--mask")), hair_rgb, tol, min_z, base_rgb,
+                  opt("--keep-texture", flag=True), ring_pos, ring, grooves,
+                  smooth_iters=int(opt("--smooth-iters", 30)))
     split_name = opt("--split")
     hair_obj = None
     source = None
