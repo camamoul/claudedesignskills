@@ -26,3 +26,6 @@ after-effects <- iart-ai_motion-design-skills
 color-motion <- iart-ai_motion-design-skills
 frame-capture <- Moh4696_open-3d-skills
 business-motion-film <- echris6_motion-video-kit
+fast-eevee <- written in-repo for Bratz x YSL (tested on Blender 5.3)
+fake-volumetrics <- written in-repo for Bratz x YSL (tested on Blender 5.3)
+stylized-hair <- written in-repo for Bratz x YSL (tested on Blender 5.3)
