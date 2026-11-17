@@ -47,3 +47,10 @@ Les modèles viennent de Rodin (Hyper3D, en Gen-2.5). Les yeux et la bouche sont
 - **Le ticket doré** n'est pas commencé : Claude propose un design, qu'Aurore reprendra pour le vrai.
 
 Ce qui manque encore : le modèle 3D du sac, les références de Hailey Bieber et Vaccarello (facultatif), et la musique.
+
+## Priorités de production (décision du 17/11, plus de crédits Rodin)
+- **En vrai 3D** (squelette, animation, visages expressifs) : la Bratz Kylie, la Bratz Jade, Camil, Aurore et Florine. C'est la priorité absolue.
+- **La vraie Kylie** a un gros plan de réaction. Essayer un générateur 3D gratuit (Hunyuan3D ou TRELLIS sur Hugging Face). Sinon, la traiter en « carte » (voir ci-dessous) avec un cadrage serré.
+- **Les 8 autres célébrités** : des **cartes 2D**, c'est-à-dire des images Gemini détourées et posées sur des plans dans le front row. Elles sont en pénombre, avec une faible profondeur de champ et un travelling. Images à générer « assises, de trois quarts, tournées vers le podium ».
+- **Le sac « Le 5 à 7 »** : à modéliser directement dans Blender (forme simple, cuir noir, fermoir YSL doré), sans Rodin.
+- Les modèles secondaires n'ont pas besoin d'être parfaits.
