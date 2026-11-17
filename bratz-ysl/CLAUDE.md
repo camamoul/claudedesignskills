@@ -14,8 +14,8 @@ Réponds à Camil en français, de façon concise. Il veut **un rendu lisse, fa�
 | `kylie.glb` / `kylie_rig.glb` | Bratz Kylie, robe noire fendue | Squelette et démarche faits. La robe d'un seul bloc se déforme : à corriger avec la simulation de tissu. |
 | `jade.glb` / `jade_rig.glb` | Bratz Jade, sequins noirs, fume | Squelette et démarche faits. **Les lèvres sont trop pointues : à lisser.** |
 | `team_camil.glb` | Camil (garçon), smoking noir sur torse nu, pantalon très large | Pas encore de squelette. |
-| `team_fille1.glb` | Brune ondulée, mini-robe en velours à épaules dénudées, collants | Pas encore de squelette. Prénom à confirmer (Aurore ou Florine). |
-| `team_fille2.glb` | Balayage caramel, bustier corset | Pas encore de squelette. Le liseré du corset paraît rougeâtre : le passer en noir. Prénom à confirmer. |
+| `team_florine.glb` | **Florine** : brune ondulée, mini-robe en velours à épaules dénudées, collants | Pas encore de squelette. |
+| `team_aurore.glb` | **Aurore** : balayage caramel, bustier corset | Pas encore de squelette. Le liseré du corset paraît rougeâtre : le passer en noir. |
 
 Les modèles viennent de Rodin (Hyper3D, en Gen-2.5). Les yeux et la bouche sont **peints dans la texture** : il n'y a pas de géométrie de paupières.
 
@@ -32,4 +32,13 @@ Les modèles viennent de Rodin (Hyper3D, en Gen-2.5). Les yeux et la bouche sont
 5. Réaliser les 9 célébrités du front row, reconnaissables à leurs signes distinctifs, et la vraie Kylie, différente de la Bratz Kylie.
 6. Animer, mettre en caméra (telle que décrite dans le DA), rendre et monter. Ajouter le sound design et les voix enregistrées par l'équipe.
 
-Ce qui manque encore : les polices, le sac YSL (à générer à part), le design du ticket doré (Aurore) et la musique.
+## Décisions complémentaires (17/11)
+- **La vraie Kylie** au front row porte une **perruque rose** (époque « King Kylie »), pour la distinguer de sa Bratz en noir.
+- **Sia** : carré à frange, moitié noir, moitié blond platine.
+- **Lady Gaga et Doja Cat** : des looks **gothiques noirs** (chapeau, voilette, cristaux noirs), pour rester en noir et or.
+- **Le salon privé** : velours noir et or, laiton, champagne, lumière tamisée.
+- **Le miroir de la fin** : une chambre neutre, sans personne dans le reflet.
+- **Les polices** : Camil a une capture de la police Bratz (en rose dans la capture, **à utiliser en blanc**). Il n'a pas les fichiers .otf : il faut trouver un équivalent libre ou vectoriser.
+- **Le ticket doré** n'est pas commencé : Claude propose un design, qu'Aurore reprendra pour le vrai.
+
+Ce qui manque encore : la capture de la police, le sac YSL (à générer à part), les références des célébrités et la musique.
