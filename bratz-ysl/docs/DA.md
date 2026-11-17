@@ -77,3 +77,13 @@ Vidéo de défilé en 3D, 30 s, 16:9. Des personnages au rendu série Bratz, dan
 10. En coulisses, on parle aux Bratz (4 s).
 11. Photo avec la Kylie, flash, image figée (4 s).
 12. Carton final « SAINT LAURENT × BRATZ » (3 s).
+
+## 8. Précisions du 17/11 (suite)
+- **Le moment de la vraie Kylie** : la Bratz Kylie passe. La vraie Kylie fait « oh », la main devant la bouche. Un flash la frappe. Elle jette alors un regard en coin vers le haut, l'air de dire « je sais, tout le monde le sait ».
+- **La fin** : la photo avec la Bratz Kylie se retrouve sur un **mur de souvenirs**. La caméra dézoome : on est rentrés à la maison, c'est un souvenir. Fin (à confirmer).
+- **Le ton des dialogues** :
+  - pendant le défilé : choqué et admiratif ;
+  - entre nous : drôle, « OMG », très pétasse, très Bratz ;
+  - face à la Kylie : admiratif, façon Bratz.
+- **Le son** : **musique uniquement pendant le défilé**. Après le défilé, plus de musique, seulement des voix et l'ambiance au fond.
+- **Les tenues de l'équipe** : préparées par Camil avec Gemini.
