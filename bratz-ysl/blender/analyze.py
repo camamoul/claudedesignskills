@@ -3,7 +3,8 @@ Usage: python analyze.py model.glb"""
 import sys, bpy
 from mathutils import Vector
 bpy.ops.wm.read_factory_settings(use_empty=True)
-bpy.ops.import_scene.gltf(filepath=sys.argv[1])
+ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else sys.argv[1:]
+bpy.ops.import_scene.gltf(filepath=ARGS[0])
 obs=[o for o in bpy.context.scene.objects if o.type=='MESH']
 pts=[]
 for o in obs:

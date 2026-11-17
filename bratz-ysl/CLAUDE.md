@@ -54,3 +54,8 @@ Ce qui manque encore : le modèle 3D du sac, les références de Hailey Bieber e
 - **Les 8 autres célébrités** : des **cartes 2D**, c'est-à-dire des images Gemini détourées et posées sur des plans dans le front row. Elles sont en pénombre, avec une faible profondeur de champ et un travelling. Images à générer « assises, de trois quarts, tournées vers le podium ».
 - **Le sac « Le 5 à 7 »** : à modéliser directement dans Blender (forme simple, cuir noir, fermoir YSL doré), sans Rodin.
 - Les modèles secondaires n'ont pas besoin d'être parfaits.
+
+## Refaire les squelettes sur le Mac
+Les fichiers `kylie_rig.glb` et `jade_rig.glb` n'existaient que dans la session cloud. Pour les régénérer :
+`/Applications/Blender.app/Contents/MacOS/Blender -b -P blender/rig.py -- kylie assets/kylie.glb assets/kylie_rig.glb .claude/skills`
+(Même commande pour `jade`.) Les articulations de Camil, d'Aurore et de Florine sont à mesurer avec `blender/analyze.py`, puis à ajouter dans le dictionnaire `JOINTS` de `rig.py`.

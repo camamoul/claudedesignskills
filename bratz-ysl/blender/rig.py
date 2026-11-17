@@ -3,7 +3,9 @@
 Joints are given as fractions of the doll height (from analyze.py profiles).
 Skinning reuses EL4CTEO blender-character-rigging bind_mesh.run (heat weights, voxel-proxy fallback).
 
-Usage: python rig.py DOLL in.glb out.glb SKILLS_DIR
+Usage (bpy module): python rig.py DOLL in.glb out.glb SKILLS_DIR
+Usage (Blender app): blender -b -P rig.py -- DOLL in.glb out.glb SKILLS_DIR
+SKILLS_DIR = bratz-ysl/.claude/skills (contains blender-character-rigging/scripts)
 """
 import math
 import sys
@@ -11,7 +13,8 @@ import sys
 import bpy
 from mathutils import Vector
 
-doll, src, dst, skills = sys.argv[1:5]
+ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else sys.argv[1:]
+doll, src, dst, skills = ARGS[:4]
 sys.path.insert(0, skills + "/blender-character-rigging/scripts")
 
 # (x, y, z) as fractions of height H; -y is the front of the doll.
