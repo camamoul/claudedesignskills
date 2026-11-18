@@ -6,6 +6,7 @@ Réponds à Camil en français, de façon concise. Il veut **un rendu lisse, fa�
 
 ## À lire en premier
 - `docs/DA.md` : toute la direction artistique, les 24 décisions, le casting et le **storyboard v2** (section 10). C'est la référence.
+- `docs/PASSATION.md` : **état au 18/11 et plan de la V3** (retours de Camil sur la V1 et la V2, références dans `assets/refs/`, skills fast-eevee, fake-volumetrics et stylized-hair, pièges connus).
 - `.claude/skills/` : 28 skills vérifiés (Blender, rigging, animation, cheveux, tissus, lumière, rendu, caméras, motion design, montage). La provenance est dans `SOURCES.txt`.
 
 ## Les modèles 3D (`assets/`, hors git : ils sont sur le Drive « Bratz x YSL » de Camil)
